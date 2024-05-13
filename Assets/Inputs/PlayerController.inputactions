@@ -15,15 +15,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Run",
-                    "type": "Button",
-                    "id": "bf73a1c1-b861-46c8-bd03-f26ed60bd26e",
-                    "expectedControlType": "Button",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Sneak",
                     "type": "Button",
                     "id": "3b194b23-b6c1-45a2-b8eb-bb7e07fa1944",
@@ -155,17 +146,6 @@
                 },
                 {
                     "name": "",
-                    "id": "746d522d-45e8-4842-9c50-dbc32ba5a100",
-                    "path": "<Keyboard>/shift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Run",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "2ee2c44a-935a-47c2-93a5-d985d9f8c4cb",
                     "path": "<Keyboard>/space",
                     "interactions": "",
@@ -177,8 +157,8 @@
                 },
                 {
                     "name": "",
-                    "id": "7bdbe82b-130c-4ae6-adbf-c6b42d629e01",
-                    "path": "<Keyboard>/ctrl",
+                    "id": "71608721-f9a4-4845-b584-0178ab540c20",
+                    "path": "<Keyboard>/shift",
                     "interactions": "",
                     "processors": "",
                     "groups": "",

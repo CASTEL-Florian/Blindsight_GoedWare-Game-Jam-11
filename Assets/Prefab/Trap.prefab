@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7103649590766386122}
   - component: {fileID: 7209455344758897875}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: WhiteMask
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -95,6 +95,7 @@ GameObject:
   - component: {fileID: 6909675511312463844}
   - component: {fileID: 9026066059405018453}
   - component: {fileID: 4132856304212511665}
+  - component: {fileID: 3613492269091854987}
   m_Layer: 7
   m_Name: Trap
   m_TagString: Trap
@@ -241,3 +242,17 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &3613492269091854987
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6724038449543339008}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d96f8c714fe476d46a81bd77dbbc8953, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  color: {r: 1, g: 0, b: 0, a: 1}
+  boundaryType: 0

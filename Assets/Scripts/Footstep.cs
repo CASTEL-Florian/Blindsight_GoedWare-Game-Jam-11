@@ -5,7 +5,7 @@ public class Footstep : MonoBehaviour
 {
     [SerializeField] private AnimationCurve alphaCurve;
     [SerializeField] private SpriteRenderer spriteRenderer;
-    
+
     public void FadeOut(float lifetime)
     {
         StartCoroutine(FadeOutCoroutine(lifetime));
@@ -13,11 +13,14 @@ public class Footstep : MonoBehaviour
     
     private IEnumerator FadeOutCoroutine(float lifetime)
     {
+        Color startColor = spriteRenderer.color;
         float startTime = Time.time;
         while (Time.time - startTime < lifetime)
         {
             float alpha = alphaCurve.Evaluate((Time.time - startTime) / lifetime);
-            spriteRenderer.color = new Color(1, 1, 1, alpha);
+            Color color = startColor;
+            color.a = alpha;
+            spriteRenderer.color = color;
             yield return null;
         }
         Destroy(gameObject);
