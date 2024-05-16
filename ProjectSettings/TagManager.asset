@@ -10,6 +10,7 @@ TagManager:
   - Wall
   - Water
   - WinTrigger
+  - DestructibleWall
   layers:
   - Default
   - TransparentFX
@@ -21,8 +22,8 @@ TagManager:
   - Ground
   - Player
   - EndingSoundRay
-  - 
-  - 
+  - Wall
+  - WallRayCollision
   - 
   - 
   - 

@@ -15,7 +15,12 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private Vector3 checkpointPosition;
     [SerializeField] private float checkpointRotation;
     
+    [SerializeField] private Vector3 level11CheckpointPosition;
+    [SerializeField] private float level11checkpointRotation;
+    
     [SerializeField] private GameObject quitButton;
+
+    [SerializeField] private GameObject level11Button;
     
     private int currentSelectedLevel = -1;
     
@@ -30,6 +35,7 @@ public class MainMenu : MonoBehaviour
         {
             quitButton.SetActive(false);
         }
+        
         StartCoroutine(FadeInCoroutine());
         if (levelSelectPositions.Count > 0)
         {
@@ -39,6 +45,11 @@ public class MainMenu : MonoBehaviour
             }
             cursors[0].enabled = true;
             currentSelectedLevel = 0;
+        }
+
+        if (CheckpointManager.Instance != null && CheckpointManager.Instance.IsLastLevelBeaten)
+        {
+            level11Button.SetActive(true);
         }
     }
     
@@ -60,7 +71,16 @@ public class MainMenu : MonoBehaviour
         {
             CheckpointManager.Instance.SetCheckpoint(checkpointPosition, checkpointRotation);
         }
+        if (currentSelectedLevel == 12)
+        {
+            CheckpointManager.Instance.SetCheckpoint(level11CheckpointPosition, level11checkpointRotation);
+        }
         fader.TransitionToScene(sceneIndices[currentSelectedLevel]);
+    }
+
+    public void LoadLevel11()
+    {
+        fader.TransitionToScene(12);
     }
 
     public void SelectLevel(int level)

@@ -18,6 +18,8 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject titleSprite;
     [SerializeField] private AudioSource endAudioSource;
     
+    [SerializeField] private GameObject pauseMenu;
+    
     private NavMeshSurface[] navSurfaces;
     private List<Monster> monsters = new();
     private Player player;
@@ -100,16 +102,17 @@ public class GameManager : MonoBehaviour
         
         titleSprite.gameObject.SetActive(true);
         endAudioSource.Play();
-        SoundEmitter.Instance.EmitSound(titleSprite.transform.position, 50, 5, 5, SoundEmitter.SoundType.Ending, 0, 3);
+        SoundEmitter.Instance.EmitSound(titleSprite.transform.position, 50, 5, 5, SoundEmitter.SoundType.Ending, 0, 3, rayColor:SoundEmitter.RayColor.White, widthMultiplier:5);
+        SoundEmitter.Instance.EmitSound(titleSprite.transform.position, 50, 3.125f, 5, SoundEmitter.SoundType.Ending, 0, 3, 0.1f, rayColor:SoundEmitter.RayColor.White, widthMultiplier:5);
+        SoundEmitter.Instance.EmitSound(titleSprite.transform.position, 50, 1.25f, 5, SoundEmitter.SoundType.Ending, 0, 3, 0.05f, rayColor:SoundEmitter.RayColor.White, widthMultiplier:5);
         yield return new WaitForSeconds(4f);
-        int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
-        if (nextSceneIndex >= SceneManager.sceneCountInBuildSettings)
-        {
-            nextSceneIndex = 0;
-        }
         MusicPlayer.Instance.FadeOut(3f);
         MusicPlayer.Instance.PrepareFadeInAtNextScene();
-        fader.TransitionToScene(nextSceneIndex, 3f);
+        if (CheckpointManager.Instance != null)
+        {
+            CheckpointManager.Instance.IsLastLevelBeaten = true;
+        }
+        fader.TransitionToScene(0, 3f);
     }
     
     
@@ -130,5 +133,25 @@ public class GameManager : MonoBehaviour
             nextSceneIndex = 0;
         }
         fader.TransitionToScene(nextSceneIndex);
+    }
+    
+    public void QuitGame()
+    {
+        Application.Quit();
+    }
+    
+    public void BackToMainMenu()
+    {
+        fader.TransitionToScene(0);
+        if (CheckpointManager.Instance != null)
+        {
+            CheckpointManager.Instance.ResetCheckpoint();
+        }
+    }
+    
+    public void TogglePause()
+    {
+        Time.timeScale = 1 - Time.timeScale;
+        pauseMenu.SetActive(!pauseMenu.activeSelf);
     }
 }

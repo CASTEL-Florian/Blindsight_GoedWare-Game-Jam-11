@@ -288,8 +288,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerMovement: {fileID: 5506751580840512994}
   playerAudio: {fileID: 7028687041087709470}
-  clapDirectionCount: 21
-  clapRaySpeed: 7
+  clapDirectionCount: 100
+  clapRaySpeed: 10
   clapRayLifetime: 3
   clapCooldown: 0.5
   enterWaterDirectionCount: 36
@@ -314,10 +314,10 @@ MonoBehaviour:
   rightFootPrefab: {fileID: 2016215504653875759, guid: b3c85054868433b4d8f8b2d366f9247e, type: 3}
   stepDistance: 1
   footOffset: 0.2
-  runDirectionCount: 15
+  runDirectionCount: 100
   runRaySpeed: 6
-  runRayLifetime: 2
-  sneakDirectionCount: 9
+  runRayLifetime: 1
+  sneakDirectionCount: 50
   sneakRaySpeed: 2
   sneakRayLifetime: 0.7
   visibleFootsteps: 7
@@ -325,7 +325,7 @@ MonoBehaviour:
   runVolume: 1
   waterVolume: 1
   waterSpeedMultiplier: 0.7
-  waterDirectionCount: 21
+  waterDirectionCount: 100
   waterRaySpeed: 5
   waterRayLifetime: 3
   sneakStartAlpha: 0.2

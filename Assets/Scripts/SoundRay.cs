@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,21 +8,22 @@ public class SoundRay : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     [SerializeField] private List<TrailRenderer> trailRenderers;
     [SerializeField] private AnimationCurve alphaCurve;
-    
+
     public float DistanceTravelled { get; private set; }
     public Vector3 Origin { get; private set; }
-    
+
     public float StartTime { get; private set; }
-    
+
     public SoundEmitter.SoundType RaySoundType { get; private set; }
-    
+
     public string objectPoolTag;
 
     private float startAlpha = 1f;
 
     private Color mainColor = Color.white;
 
-    public void Init(float speed, float lifetime, SoundEmitter.SoundType soundType = SoundEmitter.SoundType.PlayerWalk, float startAlpha = 1f)
+    public void Init(float speed, float lifetime, SoundEmitter.SoundType soundType = SoundEmitter.SoundType.PlayerWalk,
+        float startAlpha = 1f)
     {
         SetColor(Color.white);
         this.startAlpha = startAlpha;
@@ -36,7 +38,7 @@ public class SoundRay : MonoBehaviour
             trailRenderer.Clear();
         }
     }
-    
+
     public void SetColor(Color color)
     {
         mainColor = color;
@@ -45,7 +47,7 @@ public class SoundRay : MonoBehaviour
             renderer.material.color = color;
         }
     }
-    
+
     public void SetOrderInLayer(int order)
     {
         foreach (var renderer in trailRenderers)
@@ -67,13 +69,34 @@ public class SoundRay : MonoBehaviour
                 col.a = alpha;
                 renderer.material.color = col;
             }
+
             yield return null;
         }
+
         ObjectPooler.Instance.ReturnObject(objectPoolTag, gameObject);
     }
 
     private void Update()
     {
         DistanceTravelled += rb.velocity.magnitude * Time.deltaTime;
+    }
+
+    private void OnTriggerEnter2D(Collider2D other)
+    {
+        if (other.CompareTag("Wall"))
+        {
+            rb.velocity = Vector2.zero;
+        }
+        if (other.CompareTag("DestructibleWall"))
+        {
+            DestructibleWall destructibleWall = other.GetComponent<DestructibleWall>();
+            if (RaySoundType == SoundEmitter.SoundType.PlayerClap &&
+                DistanceTravelled < destructibleWall.MaxPlayerDistance)
+            {
+                return;
+            }
+
+            rb.velocity = Vector2.zero;
+        }
     }
 }

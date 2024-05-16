@@ -22,6 +22,8 @@ public class Player : MonoBehaviour
     private float currentClapCooldown = 0f;
     private WinTrigger[] winTriggers;
     
+    private int inWaterCount = 0;
+    
     public bool Alive { get; private set; } = true;
     private void Awake()
     {
@@ -37,12 +39,14 @@ public class Player : MonoBehaviour
     {
         controller.Player.Enable();
         controller.Player.Clap.performed += Clap;
+        controller.Player.Pause.performed += Pause;
     }
     
     private void OnDisable()
     {
         controller.Player.Disable();
         controller.Player.Clap.performed -= Clap;
+        controller.Player.Pause.performed -= Pause;
     }
 
     private void Update()
@@ -80,10 +84,13 @@ public class Player : MonoBehaviour
 
         if (other.CompareTag("Water"))
         {
+            inWaterCount++;
             if (playerMovement.InWater) return;
             playerAudio.PlayEnterWaterSound();
             playerMovement.InWater = true;
             SoundEmitter.Instance.EmitSound(transform.position, enterWaterDirectionCount, waterRaySpeed, waterRayLifetime, SoundEmitter.SoundType.PlayerWalk);
+            SoundEmitter.Instance.EmitSound(transform.position, enterWaterDirectionCount, waterRaySpeed * 0.625f, waterRayLifetime, SoundEmitter.SoundType.PlayerWalk, startAlpha:0.5f);
+            SoundEmitter.Instance.EmitSound(transform.position, enterWaterDirectionCount, waterRaySpeed/4, waterRayLifetime, SoundEmitter.SoundType.PlayerWalk, startAlpha:0.2f);
         }
         
         if (other.CompareTag("WinTrigger"))
@@ -96,7 +103,11 @@ public class Player : MonoBehaviour
     {
         if (other.CompareTag("Water"))
         {
-            playerMovement.InWater = false;
+            inWaterCount--;
+            if (inWaterCount <= 0)
+            {
+                playerMovement.InWater = false;
+            }
         }
     }
 
@@ -104,7 +115,9 @@ public class Player : MonoBehaviour
     {
         if (!Alive) return;
         playerAudio.PlayDeathSound();
-        SoundEmitter.Instance.EmitSound(transform.position, 50, 8, 3, SoundEmitter.SoundType.Death);
+        SoundEmitter.Instance.EmitSound(transform.position, 50, 8, 3, SoundEmitter.SoundType.Death, 0f, 0f, 1f, SoundEmitter.RayColor.Red, widthMultiplier:2f);
+        SoundEmitter.Instance.EmitSound(transform.position, 50, 4, 3, SoundEmitter.SoundType.Death, 0f, 0f, 0.5f, SoundEmitter.RayColor.Red, widthMultiplier:2f);
+        SoundEmitter.Instance.EmitSound(transform.position, 50, 2, 3, SoundEmitter.SoundType.Death, 0f, 0f, 0.2f, SoundEmitter.RayColor.Red, widthMultiplier:2f);
         MyCamera.Instance.ShakeCamera(0.2f);
         Alive = false;
         foreach (WinTrigger winTrigger in winTriggers)
@@ -124,5 +137,10 @@ public class Player : MonoBehaviour
     {
         if (!Alive) return;
         Alive = false;
+    }
+
+    private void Pause(InputAction.CallbackContext ctx)
+    {
+        GameManager.Instance.TogglePause();
     }
 }

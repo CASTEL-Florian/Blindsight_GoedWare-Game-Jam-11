@@ -85,6 +85,20 @@ AudioMixerGroupController:
   m_Mute: 0
   m_Solo: 0
   m_BypassEffects: 0
+--- !u!244 &-5105641378779550539
+AudioMixerEffectController:
+  m_ObjectHideFlags: 3
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: 
+  m_EffectID: 73a2df496658241418eb3afe1240d412
+  m_EffectName: Attenuation
+  m_MixLevel: 517c19b7286fda14d806441d979688ea
+  m_Parameters: []
+  m_SendTarget: {fileID: 0}
+  m_EnableWetMix: 0
+  m_Bypass: 0
 --- !u!244 &-4497820730979674991
 AudioMixerEffectController:
   m_ObjectHideFlags: 3
@@ -151,6 +165,7 @@ AudioMixerController:
     - 80e0ad432696fec42a8b35147e064676
     - 0ae561c26e7c51f4698c147f7a3d01c7
     - 879d57f1dcdbbbc4f87dc2172dc48d30
+    - 5fcdcff04858cde47b77107bbfdea76f
     name: View
   m_CurrentViewIndex: 0
   m_TargetSnapshot: {fileID: 24500006}
@@ -201,6 +216,7 @@ AudioMixerSnapshotController:
     d56e5941acdf81449890467c5a126034: -2.8722944
     96129a91a24cb9748b2605e2853433d6: -7.436933
     bbd5d932182d03043b09d395acbd7f61: -3.8468575
+    c593c0f4ceeff4d48b56221fb4374489: 16.532427
     57add606a4a543f4d9a734871e53511e: -10.345207
     210f6656d5525624f896a91b9cebdee5: 6.792385
     ad0f1fb75ac5c2a46b9451010114bf7c: 6.792385
@@ -285,6 +301,25 @@ AudioMixerGroupController:
   m_Send: 00000000000000000000000000000000
   m_Effects:
   - {fileID: -4497820730979674991}
+  m_UserColorIndex: 0
+  m_Mute: 0
+  m_Solo: 0
+  m_BypassEffects: 0
+--- !u!243 &3035837651713776382
+AudioMixerGroupController:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: Piano2
+  m_AudioMixer: {fileID: 24100000}
+  m_GroupID: 5fcdcff04858cde47b77107bbfdea76f
+  m_Children: []
+  m_Volume: c593c0f4ceeff4d48b56221fb4374489
+  m_Pitch: 942998f670e9ab2429e561abf053c154
+  m_Send: 00000000000000000000000000000000
+  m_Effects:
+  - {fileID: -5105641378779550539}
   m_UserColorIndex: 0
   m_Mute: 0
   m_Solo: 0
@@ -422,7 +457,8 @@ AudioMixerGroupController:
   m_Name: Piano
   m_AudioMixer: {fileID: 24100000}
   m_GroupID: b7e1de7c8f7a59b4b81dd52f33ca2a29
-  m_Children: []
+  m_Children:
+  - {fileID: 3035837651713776382}
   m_Volume: 9a1000c38c34e964db22286af7a2658c
   m_Pitch: 09222f135081be847ba55fdee313004a
   m_Send: 00000000000000000000000000000000

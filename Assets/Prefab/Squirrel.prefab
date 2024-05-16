@@ -52,7 +52,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raySpeed: 3
   rayLifetime: 1
-  rayDirectionCount: 5
+  rayDirectionCount: 50
   fleeWhenPlayerIsNear: 1
   playerDetectionRadius: 5
   distanceBetweenFootsteps: 0.5
@@ -79,7 +79,7 @@ MonoBehaviour:
   squeakRayDirectionCount: 11
   deathRaySpeed: 4
   deathRayLifetime: 3
-  deathRayDirectionCount: 11
+  deathRayDirectionCount: 100
 --- !u!195 &200011884514065132
 NavMeshAgent:
   m_ObjectHideFlags: 0

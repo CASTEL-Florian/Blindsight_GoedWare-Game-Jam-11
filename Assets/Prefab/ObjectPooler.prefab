@@ -49,15 +49,3 @@ MonoBehaviour:
     startCapacity: 32
     maxCapacity: 100
     prefab: {fileID: 5714578480878493628, guid: d554679f1d493fe40a0978f2c64830bb, type: 3}
-  - tag: DeathSoundRay
-    startCapacity: 50
-    maxCapacity: 100
-    prefab: {fileID: 8357120873141750468, guid: c7caf8b58c82fd2458913ad73565fd72, type: 3}
-  - tag: WinSoundRay
-    startCapacity: 70
-    maxCapacity: 100
-    prefab: {fileID: 6800862947371928847, guid: 8f4a13246d8d5b945974b1f35d83fb60, type: 3}
-  - tag: WaterSoundRay
-    startCapacity: 10
-    maxCapacity: 50
-    prefab: {fileID: 1148462437148362000, guid: b4a43b53d3be5b9459f874f01128985a, type: 3}

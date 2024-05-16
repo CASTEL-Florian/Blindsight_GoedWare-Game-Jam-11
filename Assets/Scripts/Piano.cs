@@ -33,6 +33,14 @@ public class Piano : MonoBehaviour
         public float lifetime;
         public SoundEmitter.RayColor color;
     }
+
+    [Serializable]
+    public class ColorRange
+    {
+        public float min;
+        public float max;
+        public SoundEmitter.RayColor color;
+    }
     
     [SerializeField] private AudioSource audioSource;
     [SerializeField] private TextAsset pitchData; // JSON file with the pitch data, created with a Python script.
@@ -42,6 +50,9 @@ public class Piano : MonoBehaviour
     [SerializeField] private List<ChannelRayData> channelRayData;
     
     [SerializeField] private List<Squirrel> squirrels;
+    
+    [SerializeField] private bool useColorRange = false;
+    [SerializeField] private List<ColorRange> ranges;
     
     private float timePerTick;
     private float currentTime = 0f;
@@ -88,8 +99,20 @@ public class Piano : MonoBehaviour
                 float y = 0f;
                 Vector3 position = transform.position + new Vector3(x, y, 0f);
                 ChannelRayData channelData = channelRayData[i];
+                SoundEmitter.RayColor color = channelData.color;
+                if (useColorRange)
+                {
+                    foreach (ColorRange range in ranges)
+                    {
+                        if (pitchNormalized >= range.min && pitchNormalized <= range.max)
+                        {
+                            color = range.color;
+                            break;
+                        }
+                    }
+                }
                 SoundEmitter.Instance.EmitSound(position, channelData.directionCount, channelData.speed,
-                    channelData.lifetime, rayColor:channelData.color);
+                    channelData.lifetime, rayColor:color);
             }
         }
     }
@@ -143,5 +166,37 @@ public class Piano : MonoBehaviour
     public void StartPlaying()
     {
         audioSource.Play();
+        
+        
+        
+        for (int i = 0; i < songData.channels.Count; i++)
+        {
+            ChannelData channel = songData.channels[i];
+            TickData tick = channel.ticks[0];
+            List<int> pitches = tick.pitches;
+            foreach (int pitch in pitches)
+            {
+                float pitchNormalized = (float)(pitch - minMaxPitch.x) / (minMaxPitch.y - minMaxPitch.x);
+                float x = pitchNormalized * pianoLength;
+                float y = 0f;
+                Vector3 position = transform.position + new Vector3(x, y, 0f);
+                ChannelRayData channelData = channelRayData[i];
+                
+                SoundEmitter.RayColor color = channelData.color;
+                if (useColorRange)
+                {
+                    foreach (ColorRange range in ranges)
+                    {
+                        if (pitchNormalized >= range.min && pitchNormalized <= range.max)
+                        {
+                            color = range.color;
+                            break;
+                        }
+                    }
+                }
+                SoundEmitter.Instance.EmitSound(position, channelData.directionCount, channelData.speed,
+                    channelData.lifetime, rayColor:color);
+            }
+        }
     }
 }

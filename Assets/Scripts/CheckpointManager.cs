@@ -10,6 +10,8 @@ public class CheckpointManager : MonoBehaviour
 
     public Vector3 LastCheckpointPosition { get; private set; }
     public float LastCheckpointRotation { get; private set; }
+    
+    public bool IsLastLevelBeaten { get; set; }
 
     private void Awake()
     {

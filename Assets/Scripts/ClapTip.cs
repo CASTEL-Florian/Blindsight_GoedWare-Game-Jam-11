@@ -19,7 +19,6 @@ public class ClapTip : MonoBehaviour
     {
         if (fadeStarted || tipCancelled) return;
         timeSinceStart += Time.deltaTime;
-        Debug.Log(timeSinceStart);
         if (timeSinceStart > timeBeforeTip)
         {
             fadeStarted = true;

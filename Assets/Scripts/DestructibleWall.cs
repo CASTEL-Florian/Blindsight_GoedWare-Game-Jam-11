@@ -15,20 +15,25 @@ public class DestructibleWall : MonoBehaviour
     [SerializeField] private int soundCount = 5;
     [SerializeField] private float soundSpeed = 3f;
     [SerializeField] private float soundLifetime = 1f;
+    [SerializeField] private float startAlpha = 0.5f;
     
     [SerializeField] private List<AudioClip> rockSounds;
     [SerializeField] private float soundEmissionCooldown = 1f;
     
     [SerializeField] private UnityEvent onDestroy;
     
+    [SerializeField] private GameObject Colider;
+    
     private float currentCooldown = 0f;
     
     
     private bool isDestroying = false;
+    
+    public float MaxPlayerDistance => maxPlayerDistance;
 
     
 
-    private void OnCollisionEnter2D(Collision2D other)
+    private void OnTriggerEnter2D(Collider2D other)
     {
         if (isDestroying) return;
         
@@ -58,11 +63,12 @@ public class DestructibleWall : MonoBehaviour
     private System.Collections.IEnumerator DestroyCoroutine()
     {
         gameObject.layer = LayerMask.NameToLayer("Player");
+        Colider.layer = LayerMask.NameToLayer("Player");
         Shuffle(soundEmitters);
         for (int i = 0; i < soundEmitters.Count; i++)
         {
             float angle = Random.Range(0, 360);
-            SoundEmitter.Instance.EmitSound(soundEmitters[i].position, soundCount, soundSpeed, soundLifetime, SoundEmitter.SoundType.Rock, angle);
+            SoundEmitter.Instance.EmitSound(soundEmitters[i].position, soundCount, soundSpeed, soundLifetime, SoundEmitter.SoundType.Rock, angle, 0f, startAlpha);
             yield return new WaitForSeconds(destroyTime / soundEmitters.Count);
         }
         Destroy(gameObject);
@@ -81,7 +87,7 @@ public class DestructibleWall : MonoBehaviour
         for (int i = 0; i < 2; i++)
         {
             float angle = Random.Range(0, 360);
-            SoundEmitter.Instance.EmitSound(soundEmitters[i].position, soundCount, soundSpeed, soundLifetime, SoundEmitter.SoundType.Rock, angle);
+            SoundEmitter.Instance.EmitSound(soundEmitters[i].position, soundCount, soundSpeed, soundLifetime, SoundEmitter.SoundType.Rock, angle, 0f, startAlpha);
         }
     }
 

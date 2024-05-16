@@ -124,7 +124,7 @@ public class Squirrel : MonoBehaviour
     
     private void Die()
     {
-        SoundEmitter.Instance.EmitSound(transform.position, deathRayDirectionCount, deathRaySpeed, deathRayLifetime, SoundEmitter.SoundType.Death);
+        SoundEmitter.Instance.EmitSound(transform.position, deathRayDirectionCount, deathRaySpeed, deathRayLifetime, SoundEmitter.SoundType.Death, rayColor:SoundEmitter.RayColor.Red);
         PlaySqueakSound();
         audioSource.PlayOneShot(deathSound);
         isDead = true;

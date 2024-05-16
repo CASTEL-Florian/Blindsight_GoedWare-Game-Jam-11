@@ -31,7 +31,7 @@ public class DrippingWater : MonoBehaviour
         if (currentTime <= 0)
         {
             float angle = Random.Range(0, 360);
-            SoundEmitter.Instance.EmitSound(transform.position, rayDirectionCount, raySpeed, rayLifetime, SoundEmitter.SoundType.Drip, angle);
+            SoundEmitter.Instance.EmitSound(transform.position, rayDirectionCount, raySpeed, rayLifetime, SoundEmitter.SoundType.Drip, angle, 0, 1f, SoundEmitter.RayColor.Blue);
             audioSource.PlayOneShot(dripSounds[Random.Range(0, dripSounds.Count)]);
             currentTime = timeBetweenDrips;
         }

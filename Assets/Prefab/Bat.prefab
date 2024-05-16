@@ -51,7 +51,7 @@ MonoBehaviour:
   doubleSqueakSound: {fileID: 8300000, guid: 6af72e2e27395e042bdb856854265a2a, type: 3}
   raySpeed: 2.5
   rayLifetime: 2
-  rayDirectionCount: 6
+  rayDirectionCount: 50
   timeBetweenSqueaks: 0.7
   minimumTimeBetweenSounds: 3
   maximumTimeBetweenSounds: 10

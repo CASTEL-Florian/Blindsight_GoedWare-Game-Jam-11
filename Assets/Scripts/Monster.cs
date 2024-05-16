@@ -26,6 +26,7 @@ public class Monster : MonoBehaviour
     
     [SerializeField] private float distanceFromCenter = 0.2f;
     [SerializeField] private float distanceBetweenSoundEmission = 0.5f;
+    [SerializeField] private float startAlpha = 0.5f;
     private Coroutine audioFadeCoroutine;
     private float targetStartTime;
     private Vector3 lastSoundPosition;
@@ -52,7 +53,7 @@ public class Monster : MonoBehaviour
         if (Vector2.Distance(transform.position, lastSoundPosition) > distanceBetweenSoundEmission)
         {
             float angle = Random.Range(0, 360);
-            SoundEmitter.Instance.EmitSound(transform.position, soundRayCount, soundRaySpeed, soundRayLifetime, SoundEmitter.SoundType.MonsterWalk, angle, distanceFromCenter);
+            SoundEmitter.Instance.EmitSound(transform.position, soundRayCount, soundRaySpeed, soundRayLifetime, SoundEmitter.SoundType.MonsterWalk, angle, distanceFromCenter, startAlpha, SoundEmitter.RayColor.Red);
             lastSoundPosition = transform.position;
         }
         if (Vector3.Distance(transform.position, target) < 0.1f)

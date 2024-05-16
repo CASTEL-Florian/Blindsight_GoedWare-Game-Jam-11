@@ -41,6 +41,8 @@ public class Boss : MonoBehaviour
     [SerializeField] private Transform phase2Target;
     [SerializeField] private Transform phase3Target;
 
+    [SerializeField] private Boss otherBoss;
+
     private Player player;
     private NavMeshAgent navMeshAgent;
     
@@ -49,6 +51,7 @@ public class Boss : MonoBehaviour
     private bool useRightFoot = true;
     
     private bool wakeUpStarted = false;
+    private bool inWakeUpDelay = false;
     private bool chaseStarted = false;
     
     
@@ -79,14 +82,31 @@ public class Boss : MonoBehaviour
         navMeshAgent.updateUpAxis = false;
     }
 
+    public void WakeUp()
+    {
+        if (wakeUpStarted) return;
+        wakeUpStarted = true;
+        StartCoroutine(WakeUpCoroutine());
+    }
+    
+    public IEnumerator WakeUpWithDelay(float delay)
+    {
+        if (wakeUpStarted) yield break;
+        inWakeUpDelay = true;
+        yield return new WaitForSeconds(delay);
+        WakeUp();
+    }
     private void Update()
     {
         if (dead) return;
         timeSinceLastPauseEnd += Time.deltaTime;
-        if (!wakeUpStarted && Vector3.Distance(player.transform.position, transform.position) < playerDetectionRadius)
+        if (!wakeUpStarted && !inWakeUpDelay && Vector3.Distance(player.transform.position, transform.position) < playerDetectionRadius)
         {
-            wakeUpStarted = true;
-            StartCoroutine(WakeUpCoroutine());
+            WakeUp();
+            if (otherBoss != null)
+            {
+                StartCoroutine(otherBoss.WakeUpWithDelay(0.2f));
+            }
         }
 
         if (!chaseStarted) return;
@@ -141,7 +161,7 @@ public class Boss : MonoBehaviour
             
         footstep.FadeOut(2f);
             
-        SoundEmitter.Instance.EmitSound(transform.position + offset, footStepRayDirectionCount, footStepRaySpeed, footStepRayLifetime, SoundEmitter.SoundType.Boss);
+        SoundEmitter.Instance.EmitSound(transform.position + offset, footStepRayDirectionCount, footStepRaySpeed, footStepRayLifetime, SoundEmitter.SoundType.Boss, rayColor:SoundEmitter.RayColor.Boss, widthMultiplier:2f);
             
         int randomIndex = UnityEngine.Random.Range(0, footstepSounds.Count - 1);
         audioSource.PlayOneShot(footstepSounds[randomIndex]);
@@ -151,9 +171,8 @@ public class Boss : MonoBehaviour
     private IEnumerator WakeUpCoroutine()
     {
         CheckpointManager.Instance.SetCheckpoint(checkpoint.position, -90);
-        roarAudioSource.Play();
         Vector3 position = transform.position;
-        SoundEmitter.Instance.EmitSound(position, WakeUpRayaDirectionCount, WakeUpRaySpeed, WakeUpRaylifetime, SoundEmitter.SoundType.Boss, 0f, 1f);
+        Roar();
         yield return new WaitForSeconds(0.2f);
         MyCamera.Instance.ShakeCamera(0.2f);
         yield return new WaitForSeconds(1.5f);
@@ -242,13 +261,27 @@ public class Boss : MonoBehaviour
         StartCoroutine(EnterPhase2Coroutine());
     }
     
-    private IEnumerator EnterPhase2Coroutine()
+    public void EnterPhase2WithDelay(float delay)
+    {
+        if (pauseCoroutine != null)
+        {
+            StopCoroutine(pauseCoroutine);
+            inRoamingPause = false;
+            inAttackPause = false;
+        }
+        StartCoroutine(EnterPhase2Coroutine(delay));
+    }
+    
+    private IEnumerator EnterPhase2Coroutine(float delay = 0f)
     {
         target = transform.position;
         inPhase2Transition = true;
         chasing = true;
-        roarAudioSource.Play();
-        SoundEmitter.Instance.EmitSound(transform.position, WakeUpRayaDirectionCount, WakeUpRaySpeed, WakeUpRaylifetime, SoundEmitter.SoundType.Boss, 0f, 1f);
+        if (delay > 0)
+        {
+            yield return new WaitForSeconds(delay);
+        }
+        Roar();
         yield return new WaitForSeconds(0.2f);
         MyCamera.Instance.ShakeCamera(0.2f);
         yield return new WaitForSeconds(0.5f);
@@ -266,7 +299,18 @@ public class Boss : MonoBehaviour
         StartCoroutine(EnterPhase3Coroutine());
     }
     
-    private IEnumerator EnterPhase3Coroutine()
+    public void EnterPhase3WithDelay(float delay)
+    {
+        if (pauseCoroutine != null)
+        {
+            StopCoroutine(pauseCoroutine);
+            inRoamingPause = false;
+            inAttackPause = false;
+        }
+        StartCoroutine(EnterPhase3Coroutine(delay));
+    }
+    
+    private IEnumerator EnterPhase3Coroutine(float delay = 0)
     {
         inPhase3Transition = true;
         target = phase3Target.position;
@@ -275,8 +319,11 @@ public class Boss : MonoBehaviour
         float remainingDistance = navMeshAgent.remainingDistance;
         target = transform.position;
         chasing = true;
-        roarAudioSource.Play();
-        SoundEmitter.Instance.EmitSound(transform.position, WakeUpRayaDirectionCount, WakeUpRaySpeed, WakeUpRaylifetime, SoundEmitter.SoundType.Boss, 0f, 1f);
+        if (delay > 0)
+        {
+            yield return new WaitForSeconds(delay);
+        }
+        Roar();
         MyCamera.Instance.ShakeCamera(0.2f);
         float timeToReachTarget = remainingDistance / chaseSpeed;
         if (timeToReachTarget + 0.7f > playerEscapeTime && timeToReachTarget < playerEscapeTime)
@@ -296,7 +343,22 @@ public class Boss : MonoBehaviour
     {
         dead = true;
         navMeshAgent.enabled = false;
-        SoundEmitter.Instance.EmitSound(transform.position, WakeUpRayaDirectionCount, WakeUpRaySpeed, WakeUpRaylifetime, SoundEmitter.SoundType.Death, 0f, 1f);
+        SoundEmitter.Instance.EmitSound(transform.position, WakeUpRayaDirectionCount, WakeUpRaySpeed, WakeUpRaylifetime, SoundEmitter.SoundType.Death, 0f, 0.5f, 1f, rayColor:SoundEmitter.RayColor.Red, widthMultiplier:3f);
+        SoundEmitter.Instance.EmitSound(transform.position, WakeUpRayaDirectionCount, WakeUpRaySpeed * 0.625f, WakeUpRaylifetime, SoundEmitter.SoundType.Death, 0f, 0.5f, 0.5f, rayColor:SoundEmitter.RayColor.Red, widthMultiplier:3f);
+        SoundEmitter.Instance.EmitSound(transform.position, WakeUpRayaDirectionCount, WakeUpRaySpeed/4, WakeUpRaylifetime, SoundEmitter.SoundType.Death, 0f, 0.5f, 0.2f, rayColor:SoundEmitter.RayColor.Red, widthMultiplier:3f);
         deathAudioSource.Play();
+    }
+
+    public void KillBossQuiet()
+    {
+        Destroy(gameObject);
+    }
+
+    private void Roar()
+    {
+        roarAudioSource.Play();
+        SoundEmitter.Instance.EmitSound(transform.position, WakeUpRayaDirectionCount, WakeUpRaySpeed, WakeUpRaylifetime, SoundEmitter.SoundType.Boss, 0f, 0.5f, 1f, rayColor:SoundEmitter.RayColor.Boss, widthMultiplier:3);
+        SoundEmitter.Instance.EmitSound(transform.position, WakeUpRayaDirectionCount, WakeUpRaySpeed * 0.625f, WakeUpRaylifetime, SoundEmitter.SoundType.Boss, 0f, 0.5f, 0.5f, rayColor:SoundEmitter.RayColor.Boss, widthMultiplier:3);
+        SoundEmitter.Instance.EmitSound(transform.position, WakeUpRayaDirectionCount, WakeUpRaySpeed/4, WakeUpRaylifetime, SoundEmitter.SoundType.Boss, 0f, 0.5f, 0.2f, rayColor:SoundEmitter.RayColor.Boss, widthMultiplier:3);
     }
 }

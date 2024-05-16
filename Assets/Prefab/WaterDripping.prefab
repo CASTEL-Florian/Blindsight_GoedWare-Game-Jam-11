@@ -49,7 +49,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   raySpeed: 2
   rayLifetime: 2
-  rayDirectionCount: 4
+  rayDirectionCount: 50
   timeBetweenDrips: 1
   dripSounds:
   - {fileID: 8300000, guid: 674cbfb3a834fcb40bcf2533a1ce6a1d, type: 3}

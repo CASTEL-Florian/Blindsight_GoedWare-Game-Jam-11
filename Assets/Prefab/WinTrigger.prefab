@@ -49,9 +49,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   raySpeed: 3
-  rayLifetime: 6
+  rayLifetime: 3
   rayDirectionCount: 70
   distanceFromCenter: 0.5
+  widthMultiplier: 1.5
   audioSource: {fileID: 943455602416717099}
 --- !u!58 &6469840873907938376
 CircleCollider2D:

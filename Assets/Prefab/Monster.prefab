@@ -106,12 +106,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0253ab4fb1af7364083c5a6697c9c7f5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soundRayCount: 5
-  soundRaySpeed: 2
-  soundRayLifetime: 1
+  soundRayCount: 50
+  soundRaySpeed: 1
+  soundRayLifetime: 2
   audioSource: {fileID: 2051172804267361554}
-  distanceFromCenter: 0.5
-  distanceBetweenSoundEmission: 0.5
+  distanceFromCenter: 0
+  distanceBetweenSoundEmission: 0.8
 --- !u!82 &2051172804267361554
 AudioSource:
   m_ObjectHideFlags: 0
